@@ -36,6 +36,11 @@ interface SwitchToChosenChatButtonParams {
   allowChannelChats?: boolean
 }
 
+interface CopyButtonParams {
+  text: string
+  copy: string
+}
+
 interface GameButtonParams {
   text: string
   game: Interfaces.TelegramCallbackGame
@@ -192,6 +197,27 @@ export class InlineKeyboard {
    */
   static switchToChosenChat (params: SwitchToChosenChatButtonParams): Interfaces.TelegramInlineKeyboardButton {
     return InlineKeyboard.switchToChosenChatButton(params)
+  }
+
+  /**
+   * Description of the button that copies the specified text to the clipboard.
+   */
+  static copyButton (params: CopyButtonParams): Interfaces.TelegramInlineKeyboardButton {
+    return {
+      text: params.text,
+      copy_text: {
+        text: params.copy
+      }
+    }
+  }
+
+  /**
+   * Description of the button that copies the specified text to the clipboard.
+   * 
+   * An alias for `copyButton`.
+   */
+  static copy (params: CopyButtonParams): Interfaces.TelegramInlineKeyboardButton {
+    return InlineKeyboard.copyButton(params)
   }
 
   /** Generate game button */
