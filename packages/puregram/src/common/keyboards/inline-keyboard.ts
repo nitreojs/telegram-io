@@ -213,7 +213,7 @@ export class InlineKeyboard {
 
   /**
    * Description of the button that copies the specified text to the clipboard.
-   * 
+   *
    * An alias for `copyButton`.
    */
   static copy (params: CopyButtonParams): Interfaces.TelegramInlineKeyboardButton {
