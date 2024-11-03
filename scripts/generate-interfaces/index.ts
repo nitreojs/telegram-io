@@ -121,7 +121,13 @@ class InterfaceService {
 
       // INFO: any [TelegramInputFile] must be replaced with [MediaInput]
       if (type === 'TelegramInputFile | string') {
-        type = 'MediaInput'
+        // INFO: except for [InputSticker]
+        if (iface.name === 'InputSticker') {
+          // INFO: for which allow only strings (file IDs + URLs)
+          type = 'string'
+        } else {
+          type = 'MediaInput'
+        }
       }
 
       // INFO: TelegramInputMedia(*)['media'] should be MediaInput
