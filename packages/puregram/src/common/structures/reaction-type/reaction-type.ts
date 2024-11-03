@@ -4,10 +4,12 @@ import { Structure } from '../../../types/interfaces'
 
 import type { ReactionTypeCustomEmoji } from './custom-emoji'
 import type { ReactionTypeEmoji } from './emoji'
+import type { ReactionTypePaid } from './paid'
 
 interface ReactionTypeMapping {
   emoji: ReactionTypeEmoji
   custom_emoji: ReactionTypeCustomEmoji
+  paid: ReactionTypePaid
 }
 
 export class ReactionType implements Structure {
