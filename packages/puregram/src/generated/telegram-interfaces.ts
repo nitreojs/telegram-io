@@ -1,9 +1,12 @@
 /// AUTO-GENERATED FILE
 /// DO NOT EDIT MANUALLY
 ///
-/// This file was auto-generated using https://github.com/ark0f/tg-bot-api
-/// Based on Bot API v7.7.0, 07.07.2024
-/// Generation date: 14.07.2024 01:56:44 MSK
+/// this file was auto-generated using https://github.com/ark0f/tg-bot-api
+/// based on Bot API v7.11.0, 31.10.2024
+/// generation date: 03.11.2024 15:29:31 MSK
+///
+/// all the auto-generation tools can be found at
+/// https://github.com/nitreojs/puregram/tree/lord/scripts/generate-interfaces
 
 import type { Readable } from 'stream' // INFO: for Interfaces.InputFile
 
@@ -23,7 +26,7 @@ import type {
 } from '../common/keyboards'
 
 /**
- * This [object](https://core.telegram.org/bots/api/#available-types) represents an incoming update.  
+ * This [object](https://core.telegram.org/bots/api/#available-types) represents an incoming update.
  * At most **one** of the optional parameters can be present in any given update.
  */
 export interface TelegramUpdate {
@@ -91,6 +94,10 @@ export interface TelegramUpdate {
    * *Optional*. New incoming pre-checkout query. Contains full information about checkout
    */
   pre_checkout_query?: TelegramPreCheckoutQuery
+  /**
+   * *Optional*. A user purchased paid media with a non-empty payload sent by the bot in a non-channel chat
+   */
+  purchased_paid_media?: TelegramPaidMediaPurchased
   /**
    * *Optional*. New poll state. Bots receive only updates about manually stopped polls and polls, which are sent by the bot
    */
@@ -219,6 +226,10 @@ export interface TelegramUser {
    * *Optional*. *True*, if the bot can be connected to a Telegram Business account to receive its messages. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
    */
   can_connect_to_business?: boolean
+  /**
+   * *Optional*. *True*, if the bot has a main Web App. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
+   */
+  has_main_web_app?: boolean
 
   [key: string]: any
 }
@@ -452,7 +463,7 @@ export interface TelegramChatFullInfo {
  */
 export interface TelegramMessage {
   /**
-   * Unique message identifier inside this chat
+   * Unique message identifier inside this chat. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent
    */
   message_id: number
   /**
@@ -460,11 +471,11 @@ export interface TelegramMessage {
    */
   message_thread_id?: number
   /**
-   * *Optional*. Sender of the message; empty for messages sent to channels. For backward compatibility, the field contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
+   * *Optional*. Sender of the message; may be empty for messages sent to channels. For backward compatibility, if the message was sent on behalf of a chat, the field contains a fake sender user in non-channel chats
    */
   from?: TelegramUser
   /**
-   * *Optional*. Sender of the message, sent on behalf of a chat. For example, the channel itself for channel posts, the supergroup itself for messages from anonymous group administrators, the linked channel for messages automatically forwarded to the discussion group. For backward compatibility, the field *from* contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
+   * *Optional*. Sender of the message when sent on behalf of a chat. For example, the supergroup itself for messages sent by its anonymous administrators or a linked channel for messages automatically forwarded to the channel's discussion group. For backward compatibility, if the message was sent on behalf of a chat, the field *from* contains a fake sender user in non-channel chats.
    */
   sender_chat?: TelegramChat
   /**
@@ -800,7 +811,7 @@ export interface TelegramMessage {
  */
 export interface TelegramMessageId {
   /**
-   * Unique message identifier
+   * Unique message identifier. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent
    */
   message_id: number
 
@@ -834,7 +845,7 @@ export type TelegramMessageEntityType = 'mention' | 'hashtag' | 'cashtag' | 'bot
  */
 export interface TelegramMessageEntity {
   /**
-   * Type of the entity. Currently, can be “mention” (`@username`), “hashtag” (`#hashtag`), “cashtag” (`$USD`), “bot\_command” (`/start@jobs_bot`), “url” (`https://telegram.org`), “email” (`do-not-reply@telegram.org`), “phone\_number” (`+1-212-555-0123`), “bold” (**bold text**), “italic” (*italic text*), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “blockquote” (block quotation), “expandable\_blockquote” (collapsed-by-default block quotation), “code” (monowidth string), “pre” (monowidth block), “text\_link” (for clickable text URLs), “text\_mention” (for users [without usernames](https://telegram.org/blog/edit#new-mentions)), “custom\_emoji” (for inline custom emoji stickers)
+   * Type of the entity. Currently, can be “mention” (`@username`), “hashtag” (`#hashtag` or `#hashtag@chatusername`), “cashtag” (`$USD` or `$USD@chatusername`), “bot\_command” (`/start@jobs_bot`), “url” (`https://telegram.org`), “email” (`do-not-reply@telegram.org`), “phone\_number” (`+1-212-555-0123`), “bold” (**bold text**), “italic” (*italic text*), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “blockquote” (block quotation), “expandable\_blockquote” (collapsed-by-default block quotation), “code” (monowidth string), “pre” (monowidth block), “text\_link” (for clickable text URLs), “text\_mention” (for users [without usernames](https://telegram.org/blog/edit#new-mentions)), “custom\_emoji” (for inline custom emoji stickers)
    */
   type: SoftString<TelegramMessageEntityType> | Enums.MessageEntityType
   /**
@@ -2117,9 +2128,16 @@ export interface TelegramVideoChatParticipantsInvited {
 }
 
 /**
- * This object represents a service message about the creation of a scheduled giveaway. Currently holds no information.
+ * This object represents a service message about the creation of a scheduled giveaway.
  */
-export interface TelegramGiveawayCreated { }
+export interface TelegramGiveawayCreated {
+  /**
+   * *Optional*. The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only
+   */
+  prize_star_count?: number
+
+  [key: string]: any
+}
 
 /**
  * This object represents a message about a scheduled giveaway.
@@ -2154,7 +2172,11 @@ export interface TelegramGiveaway {
    */
   country_codes?: string[]
   /**
-   * *Optional*. The number of months the Telegram Premium subscription won from the giveaway will be active for
+   * *Optional*. The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only
+   */
+  prize_star_count?: number
+  /**
+   * *Optional*. The number of months the Telegram Premium subscription won from the giveaway will be active for; for Telegram Premium giveaways only
    */
   premium_subscription_month_count?: number
 
@@ -2190,7 +2212,11 @@ export interface TelegramGiveawayWinners {
    */
   additional_chat_count?: number
   /**
-   * *Optional*. The number of months the Telegram Premium subscription won from the giveaway will be active for
+   * *Optional*. The number of Telegram Stars that were split between giveaway winners; for Telegram Star giveaways only
+   */
+  prize_star_count?: number
+  /**
+   * *Optional*. The number of months the Telegram Premium subscription won from the giveaway will be active for; for Telegram Premium giveaways only
    */
   premium_subscription_month_count?: number
   /**
@@ -2229,6 +2255,10 @@ export interface TelegramGiveawayCompleted {
    * *Optional*. Message with the giveaway that was completed, if it wasn't deleted
    */
   giveaway_message?: TelegramMessage
+  /**
+   * *Optional*. *True*, if the giveaway is a Telegram Star giveaway. Otherwise, currently, the giveaway is a Telegram Premium giveaway.
+   */
+  is_star_giveaway?: true
 
   [key: string]: any
 }
@@ -2279,7 +2309,7 @@ export interface TelegramUserProfilePhotos {
 
 /**
  * This object represents a file ready to be downloaded. The file can be downloaded via the link `https://api.telegram.org/file/bot<token>/<file_path>`. It is guaranteed that the link will be valid for at least 1 hour. When the link expires, a new one can be requested by calling [getFile](https://core.telegram.org/bots/api/#getfile).
- * 
+ *
  * The maximum file size to download is 20 MB
  */
 export interface TelegramFile {
@@ -2340,8 +2370,8 @@ export interface TelegramReplyKeyboardMarkup {
    */
   input_field_placeholder?: string
   /**
-   * *Optional*. Use this parameter if you want to show the keyboard to specific users only. Targets: 1) users that are @mentioned in the *text* of the [Message](https://core.telegram.org/bots/api/#message) object; 2) if the bot's message is a reply to a message in the same chat and forum topic, sender of the original message.  
-   * 
+   * *Optional*. Use this parameter if you want to show the keyboard to specific users only. Targets: 1) users that are @mentioned in the *text* of the [Message](https://core.telegram.org/bots/api/#message) object; 2) if the bot's message is a reply to a message in the same chat and forum topic, sender of the original message.
+   *
    * *Example:* A user requests to change the bot's language, bot replies to the request with a keyboard to select the new language. Other users in the group don't see the keyboard.
    */
   selective?: boolean
@@ -2494,8 +2524,8 @@ export interface TelegramReplyKeyboardRemove {
    */
   remove_keyboard: true
   /**
-   * *Optional*. Use this parameter if you want to remove the keyboard for specific users only. Targets: 1) users that are @mentioned in the *text* of the [Message](https://core.telegram.org/bots/api/#message) object; 2) if the bot's message is a reply to a message in the same chat and forum topic, sender of the original message.  
-   * 
+   * *Optional*. Use this parameter if you want to remove the keyboard for specific users only. Targets: 1) users that are @mentioned in the *text* of the [Message](https://core.telegram.org/bots/api/#message) object; 2) if the bot's message is a reply to a message in the same chat and forum topic, sender of the original message.
+   *
    * *Example:* A user votes in a poll, bot returns confirmation message in reply to the vote and removes the keyboard for that user, while still showing the keyboard with poll options to users who haven't voted yet.
    */
   selective?: boolean
@@ -2544,8 +2574,8 @@ export interface TelegramInlineKeyboardButton {
    */
   switch_inline_query?: string
   /**
-   * *Optional*. If set, pressing the button will insert the bot's username and the specified inline query in the current chat's input field. May be empty, in which case only the bot's username will be inserted.  
-   * 
+   * *Optional*. If set, pressing the button will insert the bot's username and the specified inline query in the current chat's input field. May be empty, in which case only the bot's username will be inserted.
+   *
    * This offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting something from multiple options. Not supported in channels and for messages sent on behalf of a Telegram Business account.
    */
   switch_inline_query_current_chat?: string
@@ -2554,14 +2584,18 @@ export interface TelegramInlineKeyboardButton {
    */
   switch_inline_query_chosen_chat?: TelegramSwitchInlineQueryChosenChat
   /**
-   * *Optional*. Description of the game that will be launched when the user presses the button.  
-   * 
+   * *Optional*. Description of the button that copies the specified text to the clipboard.
+   */
+  copy_text?: TelegramCopyTextButton
+  /**
+   * *Optional*. Description of the game that will be launched when the user presses the button.
+   *
    * **NOTE:** This type of button **must** always be the first button in the first row.
    */
   callback_game?: TelegramCallbackGame
   /**
-   * *Optional*. Specify *True*, to send a [Pay button](https://core.telegram.org/bots/api/#payments). Substrings “⭐” and “XTR” in the buttons's text will be replaced with a Telegram Star icon.  
-   * 
+   * *Optional*. Specify *True*, to send a [Pay button](https://core.telegram.org/bots/api/#payments). Substrings “⭐” and “XTR” in the buttons's text will be replaced with a Telegram Star icon.
+   *
    * **NOTE:** This type of button **must** always be the first button in the first row and can only be used in invoice messages.
    */
   pay?: boolean
@@ -2571,15 +2605,15 @@ export interface TelegramInlineKeyboardButton {
 
 /**
  * This object represents a parameter of the inline keyboard button used to automatically authorize a user. Serves as a great replacement for the [Telegram Login Widget](https://core.telegram.org/widgets/login) when the user is coming from Telegram. All the user needs to do is tap/click a button and confirm that they want to log in:
- * 
+ *
  * Telegram apps support these buttons as of [version 5.7](https://telegram.org/blog/privacy-discussions-web-bots#meet-seamless-web-bots).
- * 
+ *
  * Sample bot: [@discussbot](https://t.me/discussbot)
  */
 export interface TelegramLoginUrl {
   /**
-   * An HTTPS URL to be opened with user authorization data added to the query string when the button is pressed. If the user refuses to provide authorization data, the original URL without information about the user will be opened. The data added is the same as described in [Receiving authorization data](https://core.telegram.org/widgets/login#receiving-authorization-data).  
-   * 
+   * An HTTPS URL to be opened with user authorization data added to the query string when the button is pressed. If the user refuses to provide authorization data, the original URL without information about the user will be opened. The data added is the same as described in [Receiving authorization data](https://core.telegram.org/widgets/login#receiving-authorization-data).
+   *
    * **NOTE:** You **must** always check the hash of the received data to verify the authentication and the integrity of the data as described in [Checking authorization](https://core.telegram.org/widgets/login#checking-authorization).
    */
   url: string
@@ -2623,6 +2657,18 @@ export interface TelegramSwitchInlineQueryChosenChat {
    * *Optional*. True, if channel chats can be chosen
    */
   allow_channel_chats?: boolean
+
+  [key: string]: any
+}
+
+/**
+ * This object represents an inline keyboard button that copies specified text to the clipboard.
+ */
+export interface TelegramCopyTextButton {
+  /**
+   * The text to be copied to the clipboard; 1-256 characters
+   */
+  text: string
 
   [key: string]: any
 }
@@ -2747,6 +2793,14 @@ export interface TelegramChatInviteLink {
    * *Optional*. Number of pending join requests created using this link
    */
   pending_join_request_count?: number
+  /**
+   * *Optional*. The number of seconds the subscription will be active for before the next payment
+   */
+  subscription_period?: number
+  /**
+   * *Optional*. The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat using the link
+   */
+  subscription_price?: number
 
   [key: string]: any
 }
@@ -2979,6 +3033,10 @@ export interface TelegramChatMemberMember {
    * Information about the user
    */
   user: TelegramUser
+  /**
+   * *Optional*. Date when the user's subscription will expire; Unix time
+   */
+  until_date?: number
 
   [key: string]: any
 }
@@ -3334,6 +3392,18 @@ export interface TelegramReactionTypeCustomEmoji {
 }
 
 /**
+ * The reaction is paid.
+ */
+export interface TelegramReactionTypePaid {
+  /**
+   * Type of the reaction, always “paid”
+   */
+  type: 'paid'
+
+  [key: string]: any
+}
+
+/**
  * Represents a reaction added to a message along with the number of times it was added.
  */
 export interface TelegramReactionCount {
@@ -3662,7 +3732,7 @@ export interface TelegramChatBoostSourceGiftCode {
 }
 
 /**
- * The boost was obtained by the creation of a Telegram Premium giveaway. This boosts the chat 4 times for the duration of the corresponding Telegram Premium subscription.
+ * The boost was obtained by the creation of a Telegram Premium or a Telegram Star giveaway. This boosts the chat 4 times for the duration of the corresponding Telegram Premium subscription for Telegram Premium giveaways and *prize\_star\_count* / 500 times for one year for Telegram Star giveaways.
  */
 export interface TelegramChatBoostSourceGiveaway {
   /**
@@ -3674,9 +3744,13 @@ export interface TelegramChatBoostSourceGiveaway {
    */
   giveaway_message_id: number
   /**
-   * *Optional*. User that won the prize in the giveaway if any
+   * *Optional*. User that won the prize in the giveaway if any; for Telegram Premium giveaways only
    */
   user?: TelegramUser
+  /**
+   * *Optional*. The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only
+   */
+  prize_star_count?: number
   /**
    * *Optional*. True, if the giveaway was completed, but there was no user to win the prize
    */
@@ -4245,7 +4319,7 @@ export interface TelegramInputSticker {
   /**
    * The added sticker. Pass a *file\_id* as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, upload a new one using multipart/form-data, or pass “attach://\<file\_attach\_name\>” to upload a new one using multipart/form-data under \<file\_attach\_name\> name. Animated and video stickers can't be uploaded via HTTP URL. [More information on Sending Files »](https://core.telegram.org/bots/api/#sending-files)
    */
-  sticker: MediaInput
+  sticker: string
   /**
    * Format of the added sticker, must be one of “static” for a **.WEBP** or **.PNG** image, “animated” for a **.TGS** animation, “video” for a **WEBM** video
    */
@@ -4313,8 +4387,8 @@ export interface TelegramInlineQueryResultsButton {
    */
   web_app?: TelegramWebAppInfo
   /**
-   * *Optional*. [Deep-linking](https://core.telegram.org/bots/features#deep-linking) parameter for the /start message sent to the bot when a user presses the button. 1-64 characters, only `A-Z`, `a-z`, `0-9`, `_` and `-` are allowed.  
-   * 
+   * *Optional*. [Deep-linking](https://core.telegram.org/bots/features#deep-linking) parameter for the /start message sent to the bot when a user presses the button. 1-64 characters, only `A-Z`, `a-z`, `0-9`, `_` and `-` are allowed.
+   *
    * *Example:* An inline bot that sends YouTube videos can ask the user to connect the bot to their YouTube account to adapt search results accordingly. To do this, it displays a 'Connect your YouTube account' button above the results, or even before showing any. The user presses the button, switches to a private chat with the bot and, in doing so, passes a start parameter that instructs the bot to return an OAuth link. Once done, the bot can offer a [*switch\_inline*](https://core.telegram.org/bots/api/#inlinekeyboardmarkup) button so that the user can easily return to the chat where they wanted to use the bot's inline capabilities.
    */
   start_parameter?: string
@@ -4582,7 +4656,7 @@ export type TelegramInlineQueryResultVideoMimeType = 'text/html' | 'video/mp4'
 
 /**
  * Represents a link to a page containing an embedded video player or a video file. By default, this video file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the video.
- * 
+ *
  * If an InlineQueryResultVideo message contains an embedded video (e.g., YouTube), you **must** replace its content using *input\_message\_content*.
  */
 export interface TelegramInlineQueryResultVideo {
@@ -5521,7 +5595,7 @@ export interface TelegramInputInvoiceMessageContent {
    */
   description: string
   /**
-   * Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes.
+   * Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use it for your internal processes.
    */
   payload: string
   /**
@@ -5881,6 +5955,22 @@ export interface TelegramPreCheckoutQuery {
 }
 
 /**
+ * This object contains information about a paid media purchase.
+ */
+export interface TelegramPaidMediaPurchased {
+  /**
+   * User who purchased the media
+   */
+  from: TelegramUser
+  /**
+   * Bot-specified paid media payload
+   */
+  paid_media_payload: string
+
+  [key: string]: any
+}
+
+/**
  * The withdrawal is in progress.
  */
 export interface TelegramRevenueWithdrawalStatePending {
@@ -5940,6 +6030,14 @@ export interface TelegramTransactionPartnerUser {
    * *Optional*. Bot-specified invoice payload
    */
   invoice_payload?: string
+  /**
+   * *Optional*. Information about the paid media bought by the user
+   */
+  paid_media?: TelegramPaidMedia[]
+  /**
+   * *Optional*. Bot-specified paid media payload
+   */
+  paid_media_payload?: string
 
   [key: string]: any
 }
@@ -5973,6 +6071,22 @@ export interface TelegramTransactionPartnerTelegramAds {
 }
 
 /**
+ * Describes a transaction with payment for [paid broadcasting](https://core.telegram.org/bots/api/#paid-broadcasts).
+ */
+export interface TelegramTransactionPartnerTelegramApi {
+  /**
+   * Type of the transaction partner, always “telegram\_api”
+   */
+  type: 'telegram_api'
+  /**
+   * The number of successful requests that exceeded regular limits and were therefore billed
+   */
+  request_count: number
+
+  [key: string]: any
+}
+
+/**
  * Describes a transaction with an unknown source or recipient.
  */
 export interface TelegramTransactionPartnerOther {
@@ -5989,7 +6103,7 @@ export interface TelegramTransactionPartnerOther {
  */
 export interface TelegramStarTransaction {
   /**
-   * Unique identifier of the transaction. Coincides with the identifer of the original transaction for refund transactions. Coincides with *SuccessfulPayment.telegram\_payment\_charge\_id* for successful incoming payments from users.
+   * Unique identifier of the transaction. Coincides with the identifier of the original transaction for refund transactions. Coincides with *SuccessfulPayment.telegram\_payment\_charge\_id* for successful incoming payments from users.
    */
   id: string
   /**
@@ -6433,11 +6547,11 @@ export type ReplyMarkupUnion =
   | TelegramInlineKeyboardMarkup | TelegramReplyKeyboardMarkup | TelegramReplyKeyboardRemove | TelegramForceReply
   | Keyboard | KeyboardBuilder | InlineKeyboard | InlineKeyboardBuilder | ForceReply | RemoveKeyboard
 
-export type Currency = SoftString<'AED' | 'AFN' | 'ALL' | 'AMD' | 'ARS' | 'AUD' | 'AZN' | 'BAM' | 'BDT' | 'BGN' | 'BND' | 'BOB' | 'BRL' | 'BYN' | 'CAD' | 'CHF' | 'CLP' | 'CNY' | 'COP' | 'CRC' | 'CZK' | 'DKK' | 'DOP' | 'DZD' | 'EGP' | 'ETB' | 'EUR' | 'GBP' | 'GEL' | 'GTQ' | 'HKD' | 'HNL' | 'HRK' | 'HUF' | 'IDR' | 'ILS' | 'INR' | 'ISK' | 'JMD' | 'JPY' | 'KES' | 'KGS' | 'KRW' | 'KZT' | 'LBP' | 'LKR' | 'MAD' | 'MDL' | 'MMK' | 'MNT' | 'MOP' | 'MUR' | 'MVR' | 'MXN' | 'MYR' | 'MZN' | 'NGN' | 'NIO' | 'NOK' | 'NPR' | 'NZD' | 'PAB' | 'PEN' | 'PHP' | 'PKR' | 'PLN' | 'PYG' | 'QAR' | 'RON' | 'RSD' | 'RUB' | 'SAR' | 'SEK' | 'SGD' | 'THB' | 'TJS' | 'TRY' | 'TTD' | 'TWD' | 'TZS' | 'UAH' | 'UGX' | 'USD' | 'UYU' | 'UZS' | 'VND' | 'YER' | 'ZAR'>
+export type Currency = SoftString<'AED' | 'AFN' | 'ALL' | 'AMD' | 'ARS' | 'AUD' | 'AZN' | 'BAM' | 'BDT' | 'BGN' | 'BHD' | 'BND' | 'BOB' | 'BRL' | 'BYN' | 'CAD' | 'CHF' | 'CLP' | 'CNY' | 'COP' | 'CRC' | 'CZK' | 'DKK' | 'DOP' | 'DZD' | 'EGP' | 'ETB' | 'EUR' | 'GBP' | 'GEL' | 'GHS' | 'GTQ' | 'HKD' | 'HNL' | 'HRK' | 'HUF' | 'IDR' | 'ILS' | 'INR' | 'IQD' | 'IRR' | 'ISK' | 'JMD' | 'JOD' | 'JPY' | 'KES' | 'KGS' | 'KRW' | 'KZT' | 'LBP' | 'LKR' | 'MAD' | 'MDL' | 'MMK' | 'MNT' | 'MOP' | 'MUR' | 'MVR' | 'MXN' | 'MYR' | 'MZN' | 'NGN' | 'NIO' | 'NOK' | 'NPR' | 'NZD' | 'PAB' | 'PEN' | 'PHP' | 'PKR' | 'PLN' | 'PYG' | 'QAR' | 'RON' | 'RSD' | 'RUB' | 'SAR' | 'SEK' | 'SGD' | 'SYP' | 'THB' | 'TJS' | 'TRY' | 'TTD' | 'TWD' | 'TZS' | 'UAH' | 'UGX' | 'USD' | 'UYU' | 'UZS' | 'VEF' | 'VND' | 'YER' | 'ZAR'>
 
 /**
  * This object describes a message that can be inaccessible to the bot. It can be one of
- * 
+ *
  * * [Message](https://core.telegram.org/bots/api/#message)
  * * [InaccessibleMessage](https://core.telegram.org/bots/api/#inaccessiblemessage)
  */
@@ -6447,7 +6561,7 @@ export type TelegramMaybeInaccessibleMessage =
 
 /**
  * This object describes the origin of a message. It can be one of
- * 
+ *
  * * [MessageOriginUser](https://core.telegram.org/bots/api/#messageoriginuser)
  * * [MessageOriginHiddenUser](https://core.telegram.org/bots/api/#messageoriginhiddenuser)
  * * [MessageOriginChat](https://core.telegram.org/bots/api/#messageoriginchat)
@@ -6461,7 +6575,7 @@ export type TelegramMessageOrigin =
 
 /**
  * This object describes paid media. Currently, it can be one of
- * 
+ *
  * * [PaidMediaPreview](https://core.telegram.org/bots/api/#paidmediapreview)
  * * [PaidMediaPhoto](https://core.telegram.org/bots/api/#paidmediaphoto)
  * * [PaidMediaVideo](https://core.telegram.org/bots/api/#paidmediavideo)
@@ -6473,7 +6587,7 @@ export type TelegramPaidMedia =
 
 /**
  * This object describes the way a background is filled based on the selected colors. Currently, it can be one of
- * 
+ *
  * * [BackgroundFillSolid](https://core.telegram.org/bots/api/#backgroundfillsolid)
  * * [BackgroundFillGradient](https://core.telegram.org/bots/api/#backgroundfillgradient)
  * * [BackgroundFillFreeformGradient](https://core.telegram.org/bots/api/#backgroundfillfreeformgradient)
@@ -6485,7 +6599,7 @@ export type TelegramBackgroundFill =
 
 /**
  * This object describes the type of a background. Currently, it can be one of
- * 
+ *
  * * [BackgroundTypeFill](https://core.telegram.org/bots/api/#backgroundtypefill)
  * * [BackgroundTypeWallpaper](https://core.telegram.org/bots/api/#backgroundtypewallpaper)
  * * [BackgroundTypePattern](https://core.telegram.org/bots/api/#backgroundtypepattern)
@@ -6499,7 +6613,7 @@ export type TelegramBackgroundType =
 
 /**
  * This object contains information about one member of a chat. Currently, the following 6 types of chat members are supported:
- * 
+ *
  * * [ChatMemberOwner](https://core.telegram.org/bots/api/#chatmemberowner)
  * * [ChatMemberAdministrator](https://core.telegram.org/bots/api/#chatmemberadministrator)
  * * [ChatMemberMember](https://core.telegram.org/bots/api/#chatmembermember)
@@ -6517,17 +6631,19 @@ export type TelegramChatMember =
 
 /**
  * This object describes the type of a reaction. Currently, it can be one of
- * 
+ *
  * * [ReactionTypeEmoji](https://core.telegram.org/bots/api/#reactiontypeemoji)
  * * [ReactionTypeCustomEmoji](https://core.telegram.org/bots/api/#reactiontypecustomemoji)
+ * * [ReactionTypePaid](https://core.telegram.org/bots/api/#reactiontypepaid)
  */
 export type TelegramReactionType =
   | TelegramReactionTypeEmoji
   | TelegramReactionTypeCustomEmoji
+  | TelegramReactionTypePaid
 
 /**
  * This object represents the scope to which bot commands are applied. Currently, the following 7 scopes are supported:
- * 
+ *
  * * [BotCommandScopeDefault](https://core.telegram.org/bots/api/#botcommandscopedefault)
  * * [BotCommandScopeAllPrivateChats](https://core.telegram.org/bots/api/#botcommandscopeallprivatechats)
  * * [BotCommandScopeAllGroupChats](https://core.telegram.org/bots/api/#botcommandscopeallgroupchats)
@@ -6547,7 +6663,7 @@ export type TelegramBotCommandScope =
 
 /**
  * This object describes the bot's menu button in a private chat. It should be one of
- * 
+ *
  * * [MenuButtonCommands](https://core.telegram.org/bots/api/#menubuttoncommands)
  * * [MenuButtonWebApp](https://core.telegram.org/bots/api/#menubuttonwebapp)
  * * [MenuButtonDefault](https://core.telegram.org/bots/api/#menubuttondefault)
@@ -6559,7 +6675,7 @@ export type TelegramMenuButton =
 
 /**
  * This object describes the source of a chat boost. It can be one of
- * 
+ *
  * * [ChatBoostSourcePremium](https://core.telegram.org/bots/api/#chatboostsourcepremium)
  * * [ChatBoostSourceGiftCode](https://core.telegram.org/bots/api/#chatboostsourcegiftcode)
  * * [ChatBoostSourceGiveaway](https://core.telegram.org/bots/api/#chatboostsourcegiveaway)
@@ -6571,7 +6687,7 @@ export type TelegramChatBoostSource =
 
 /**
  * This object represents the content of a media message to be sent. It should be one of
- * 
+ *
  * * [InputMediaAnimation](https://core.telegram.org/bots/api/#inputmediaanimation)
  * * [InputMediaDocument](https://core.telegram.org/bots/api/#inputmediadocument)
  * * [InputMediaAudio](https://core.telegram.org/bots/api/#inputmediaaudio)
@@ -6587,7 +6703,7 @@ export type TelegramInputMedia =
 
 /**
  * This object describes the paid media to be sent. Currently, it can be one of
- * 
+ *
  * * [InputPaidMediaPhoto](https://core.telegram.org/bots/api/#inputpaidmediaphoto)
  * * [InputPaidMediaVideo](https://core.telegram.org/bots/api/#inputpaidmediavideo)
  */
@@ -6597,7 +6713,7 @@ export type TelegramInputPaidMedia =
 
 /**
  * This object represents one result of an inline query. Telegram clients currently support results of the following 20 types:
- * 
+ *
  * * [InlineQueryResultCachedAudio](https://core.telegram.org/bots/api/#inlinequeryresultcachedaudio)
  * * [InlineQueryResultCachedDocument](https://core.telegram.org/bots/api/#inlinequeryresultcacheddocument)
  * * [InlineQueryResultCachedGif](https://core.telegram.org/bots/api/#inlinequeryresultcachedgif)
@@ -6643,7 +6759,7 @@ export type TelegramInlineQueryResult =
 
 /**
  * This object represents the content of a message to be sent as a result of an inline query. Telegram clients currently support the following 5 types:
- * 
+ *
  * * [InputTextMessageContent](https://core.telegram.org/bots/api/#inputtextmessagecontent)
  * * [InputLocationMessageContent](https://core.telegram.org/bots/api/#inputlocationmessagecontent)
  * * [InputVenueMessageContent](https://core.telegram.org/bots/api/#inputvenuemessagecontent)
@@ -6659,7 +6775,7 @@ export type TelegramInputMessageContent =
 
 /**
  * This object describes the state of a revenue withdrawal operation. Currently, it can be one of
- * 
+ *
  * * [RevenueWithdrawalStatePending](https://core.telegram.org/bots/api/#revenuewithdrawalstatepending)
  * * [RevenueWithdrawalStateSucceeded](https://core.telegram.org/bots/api/#revenuewithdrawalstatesucceeded)
  * * [RevenueWithdrawalStateFailed](https://core.telegram.org/bots/api/#revenuewithdrawalstatefailed)
@@ -6671,21 +6787,23 @@ export type TelegramRevenueWithdrawalState =
 
 /**
  * This object describes the source of a transaction, or its recipient for outgoing transactions. Currently, it can be one of
- * 
+ *
  * * [TransactionPartnerUser](https://core.telegram.org/bots/api/#transactionpartneruser)
  * * [TransactionPartnerFragment](https://core.telegram.org/bots/api/#transactionpartnerfragment)
  * * [TransactionPartnerTelegramAds](https://core.telegram.org/bots/api/#transactionpartnertelegramads)
+ * * [TransactionPartnerTelegramApi](https://core.telegram.org/bots/api/#transactionpartnertelegramapi)
  * * [TransactionPartnerOther](https://core.telegram.org/bots/api/#transactionpartnerother)
  */
 export type TelegramTransactionPartner =
   | TelegramTransactionPartnerUser
   | TelegramTransactionPartnerFragment
   | TelegramTransactionPartnerTelegramAds
+  | TelegramTransactionPartnerTelegramApi
   | TelegramTransactionPartnerOther
 
 /**
  * This object represents an error in the Telegram Passport element which was submitted that should be resolved by the user. It should be one of:
- * 
+ *
  * * [PassportElementErrorDataField](https://core.telegram.org/bots/api/#passportelementerrordatafield)
  * * [PassportElementErrorFrontSide](https://core.telegram.org/bots/api/#passportelementerrorfrontside)
  * * [PassportElementErrorReverseSide](https://core.telegram.org/bots/api/#passportelementerrorreverseside)
