@@ -141,7 +141,13 @@ export const decomplexify = (obj: Record<string, any>) => {
       boolean: (value: boolean) => String(value)
     }
 
-    const fn = fns[valueType] || ((value: any) => 'format' in value ? value.format() : JSON.stringify(value))
+    const fn = fns[valueType] || (
+      (value: any) => (
+        ('format' in value && typeof value.format === 'function')
+          ? value.format()
+          : JSON.stringify(value)
+      )
+    )
 
     result[key] = fn(value)
   }
