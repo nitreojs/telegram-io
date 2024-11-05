@@ -374,13 +374,13 @@ export class Telegram {
 
     for (const [key, input] of mediaEntries) {
       // INFO: we allow only [MediaInput] media values since [puregram@2.5.0]
-      if (!isMediaInput(input)) {
-        throw new TypeError('expected media to be created via `MediaSource`')
+      if (isMediaInput(input)) {
+        const fdValue = await this.createMediaInput(input)
+
+        fd.set(key, fdValue)
+      } else {
+        fd.set(key, typeof input === 'string' ? input : input[key])
       }
-
-      const fdValue = await this.createMediaInput(input)
-
-      fd.set(key, fdValue)
     }
 
     const encoder = new FormDataEncoder(fd)
